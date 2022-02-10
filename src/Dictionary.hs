@@ -2,7 +2,8 @@
 
 module Dictionary where
 
-import Data.ByteString (ByteString, split)
+import Prelude hiding (filter)
+import Data.ByteString (ByteString, split, filter)
 import Data.ByteString.Char8 (unpack)
 import Data.FileEmbed (embedFile)
 
@@ -16,7 +17,7 @@ allWordsInput :: ByteString
 allWordsInput = $(embedFile "words/all.txt")
 
 puzzleWords :: WordList
-puzzleWords = WordList $ map unpack $ split 10 puzzleInput
+puzzleWords = WordList $ map unpack $ split 10 $ filter (/=13) puzzleInput
 
 allWords :: WordList
-allWords = WordList $ map unpack $ split 10 allWordsInput
+allWords = WordList $ map unpack $ split 10 $ filter (/=13) allWordsInput
