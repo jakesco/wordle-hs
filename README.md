@@ -31,4 +31,4 @@ $ cabal install
 $ wordle
 ```
 
-> The default install target for `cabal` is `~/.cabal/bin`. Make sure the `wordle` executable is on your path.
+> The default install target for `cabal install` is `~/.cabal/bin`. Make sure the `wordle` executable is on your path.
