@@ -12,7 +12,7 @@ Thanks to Josh Wardle for creating the original game: https://www.powerlanguage.
 
 The recommend installation method is using `cabal-install`. Most linux distribuitons have `cabal` and `ghc` available in the official repositories. Alternatively you can install them on any platform using [ghcup](https://www.haskell.org/ghcup/).
 
-This project requires `GHC 8.10.7`.
+This project requires `GHC 8.10`.
 
 Build with `cabal-install`:
 ```bash
