@@ -12,7 +12,7 @@ The [Releases](https://github.com/jakesco/wordle-hs/releases) page provides pre-
 
 The recommend installation method is using `cabal-install`. Most linux distribuitons have `cabal` and `ghc` available in the official repositories. Alternatively you can install them on any platform using [ghcup](https://www.haskell.org/ghcup/).
 
-This project requires `GHC 8.10.7`.
+This project requires `GHC 8.10`.
 
 Build with `cabal-install`:
 ```bash
@@ -31,4 +31,4 @@ $ cabal install
 $ wordle
 ```
 
-> The default install target for `cabal` is `~/.cabal/bin`. Make sure the `wordle` executable is on your path.
+> The default install target for `cabal install` is `~/.cabal/bin`. Make sure the `wordle` executable is on your path.
