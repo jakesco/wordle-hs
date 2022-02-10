@@ -6,7 +6,7 @@ Thanks to Josh Wardle for creating the original game: https://www.powerlanguage.
 
 ## Pre-compiled Binaries
 
-> TODO
+The [Releases](https://github.com/jakesco/wordle-hs/releases) page provides pre-compiled binaries for Linux 64-bit systems.
 
 ## Manual Install
 
