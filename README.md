@@ -1,4 +1,4 @@
-# wordle cli
+# Wordle in Haskell
 Play Wordle on the command line.
 
 Thanks to Josh Wardle for creating the original game: https://www.powerlanguage.co.uk/wordle/
