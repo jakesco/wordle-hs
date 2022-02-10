@@ -26,6 +26,6 @@ executable wordle
     hs-source-dirs:   src
     other-modules:    Words
     default-language: Haskell2010
-    build-depends:    base ^>=4.14.3.0
+    build-depends:    base >=4.14 && <4.15
                     , random
-                    , split
+                    , pretty-terminal
