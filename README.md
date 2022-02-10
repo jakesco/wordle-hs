@@ -20,8 +20,15 @@ $ cabal update
 $ cabal build
 ```
 
-Then you can run with:
+Then you can run from the project directory with:
 ```bash
 $ cabal run
 ```
 
+or install the executable.
+```bash
+$ cabal install
+$ wordle
+```
+
+> The default install target for `cabal` is `~/.cabal/bin`. Make sure the `wordle` executable is on your path.

@@ -7,6 +7,9 @@ author:             Jake Scott
 maintainer:         scottj1123@gmail.com
 extra-source-files:
     README.md
+data-files:
+    words/all.txt
+    words/puzzle.txt
 
 executable wordle
     main-is:          Main.hs
