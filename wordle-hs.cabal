@@ -1,23 +1,10 @@
 cabal-version:      2.4
 name:               wordle-hs
 version:            0.1.0.0
-
--- A short (one-line) description of the package.
--- synopsis:
-
--- A longer description of the package.
--- description:
-
--- A URL where users can report bugs.
--- bug-reports:
-
+synopsis:           Play Wordle on the command line.
 license:            MIT
 author:             Jake Scott
 maintainer:         scottj1123@gmail.com
-
--- A copyright notice.
--- copyright:
--- category:
 extra-source-files:
     README.md
 

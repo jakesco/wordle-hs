@@ -1,4 +1,27 @@
 # wordle cli
-Command line version of Wordle.
+Play Wordle on the command line.
 
- Original game by Josh Wardle: https://www.powerlanguage.co.uk/wordle/
+Thanks to Josh Wardle for creating the original game: https://www.powerlanguage.co.uk/wordle/
+
+
+## Pre-compiled Binaries
+
+> TODO
+
+## Manual Install
+
+The recommend installation method is using `cabal-install`. Most linux distribuitons have `cabal` and `ghc` available in the official repositories. Alternatively you can install them on any platform using [ghcup](https://www.haskell.org/ghcup/).
+
+This project requires `GHC 8.10.7`.
+
+Build with `cabal-install`:
+```bash
+$ cabal update
+$ cabal build
+```
+
+Then you can run with:
+```bash
+$ cabal run
+```
+
