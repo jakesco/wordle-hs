@@ -3,6 +3,7 @@ module Main where
 import Control.Monad (forever, when)
 import Data.Char (toLower, toUpper)
 import Data.Maybe (isJust)
+import System.Console.Pretty (Color (..), Pretty, bgColor)
 import System.Exit (exitSuccess)
 import System.IO
   ( BufferMode (NoBuffering),
@@ -10,8 +11,7 @@ import System.IO
     stdout,
   )
 import System.Random (randomRIO)
-import System.Console.Pretty (Color (..), bgColor)
-import Words (WordList (..), allWords)
+import Words (WordList (..), allWords, puzzleWords)
 
 data Puzzle = Puzzle String [Guess]
 
@@ -42,18 +42,17 @@ mkPuzzle :: String -> Puzzle
 mkPuzzle s = Puzzle s []
 
 presentGuess :: [(Char, CharStatus)] -> String
-presentGuess [] = []
-presentGuess (g : gs) =
-  (getColor (snd g) $ pad (fst g)) ++ (presentGuess gs)
+presentGuess = foldr (\g -> (++) (getColor (snd g) $ pad (fst g))) []
 
 pad :: Char -> String
 pad c = [' ', toUpper c, ' ']
 
+getColor :: Pretty a => CharStatus -> a -> a
 getColor cs =
   case cs of
     InRightPlace -> bgColor Green
-    InWord       -> bgColor Yellow
-    NotInWord    -> bgColor Red
+    InWord -> bgColor Yellow
+    NotInWord -> bgColor Red
 
 isWord :: WordList -> String -> Bool
 isWord (WordList wl) s = s `elem` wl
@@ -82,12 +81,15 @@ validateGuess guess =
 
 checkGuess :: String -> String -> [CharStatus]
 checkGuess answer guess =
-  let check = zip (isGreen answer guess) (isYellow answer guess) in
-    map (\(g, y) ->
-           case (g, y) of
-             (True, _) -> InRightPlace
-             (_, True) -> InWord
-             (_, _)    -> NotInWord) check
+  let check = zip (isGreen answer guess) (isYellow answer guess)
+   in map
+        ( \(g, y) ->
+            case (g, y) of
+              (True, _) -> InRightPlace
+              (_, True) -> InWord
+              (_, _) -> NotInWord
+        )
+        check
 
 handleGuess :: Puzzle -> String -> IO Puzzle
 handleGuess (Puzzle p guesses) guess = do
@@ -107,19 +109,22 @@ gameWin :: Puzzle -> IO ()
 gameWin (Puzzle word guesses) =
   case guesses of
     [] -> return ()
-    (Guess g):_ ->
-      when (all ((==InRightPlace) . snd) g) $
-      do
-        putStrLn $ "You Win! The word was " ++ word ++ "."
-        exitSuccess
+    (Guess g) : _ ->
+      when (all ((== InRightPlace) . snd) g) $
+        do
+          putStrLn $ "You Win! The word was " ++ word ++ "."
+          exitSuccess
 
 gameLoop :: Puzzle -> IO ()
 gameLoop puzzle = forever $ do
   gameOver puzzle
   gameWin puzzle
-  putStrLn $ "Enter your guess ["
-    ++ show (guessesMade puzzle)
-    ++ "/" ++ show maxGuesses ++ "]"
+  putStrLn $
+    "Enter your guess ["
+      ++ show (guessesMade puzzle)
+      ++ "/"
+      ++ show maxGuesses
+      ++ "]"
   putStr "> "
   guess <- getLine
   case validateGuess $ map toLower guess of
@@ -130,6 +135,6 @@ gameLoop puzzle = forever $ do
 main :: IO ()
 main = do
   hSetBuffering stdout NoBuffering
-  word <- randomWord allWords
+  word <- randomWord puzzleWords
   let puzzle = mkPuzzle (map toUpper word)
   gameLoop puzzle
