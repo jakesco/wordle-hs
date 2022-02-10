@@ -5,26 +5,16 @@ import Dictionary (WordList (..), puzzleWords)
 import System.Console.Pretty (Color (..), Pretty, bgColor)
 import System.Random (randomRIO)
 
-data Puzzle = Puzzle
-  { answer :: String,
-    guesses :: [Guess]
-  }
-  deriving (Eq)
+type Answer = String
 
-instance Show Puzzle where
-  show (Puzzle p guesses) =
-    case guesses of
-      [] -> concatMap (pad . toUpper) p
-      ((Guess g) : _) -> presentGuess g
-
-data CharStatus = InRightPlace | InWord | NotInWord
+data CharStatus = InRightPlace | InWord | NotInWord | NotChecked
   deriving (Eq, Show)
 
 newtype Guess = Guess [(Char, CharStatus)]
-  deriving (Eq, Show)
+  deriving (Eq)
 
-presentGuess :: [(Char, CharStatus)] -> String
-presentGuess = foldr (\g -> (++) (getColor (snd g) $ pad (fst g))) []
+instance Show Guess where
+  show (Guess g) = foldr (\g -> (++) (getColor (snd g) $ pad (fst g))) [] g
 
 pad :: Char -> String
 pad c = [' ', toUpper c, ' ']
@@ -35,31 +25,51 @@ getColor cs =
     InRightPlace -> bgColor Green
     InWord -> bgColor Yellow
     NotInWord -> bgColor Red
+    _ -> bgColor Cyan
 
-isGreen :: String -> String -> [Bool]
-isGreen answer = zipWith (==) answer
+data Puzzle = Puzzle
+  { answer :: Answer,
+    guesses :: [Guess]
+  }
+  deriving (Eq)
 
-isYellow :: String -> String -> [Bool]
-isYellow answer = map (`elem` answer)
+instance Show Puzzle where
+  show (Puzzle p guesses) =
+    case guesses of
+      [] -> concatMap pad p
+      (g : _) -> show g
 
 guessesMade :: Puzzle -> Int
 guessesMade puzzle = 1 + (length . guesses) puzzle
 
-checkGuess :: String -> String -> [CharStatus]
+charInAnswer :: Answer -> Char -> Bool
+charInAnswer answer = (`elem` answer)
+
+findGreen :: Answer -> String -> [(Char, CharStatus)]
+findGreen answer guess = zip guess $ map (\s -> if s then InRightPlace else NotChecked) $ zipWith (==) answer guess
+
+countOccurances :: Eq a => a -> [a] -> Int
+countOccurances c = length . filter (== c)
+
+findYellow :: Answer -> String -> [(Char, CharStatus)] -> [(Char, CharStatus)]
+findYellow _ _ [] = []
+findYellow answer known (g : gs) =
+  case g of
+    (c, NotChecked) ->
+      if (countOccurances c answer > countOccurances c known) && charInAnswer answer c
+        then (c, InWord) : findYellow answer (c : known) gs
+        else (c, NotInWord) : findYellow answer known gs
+    (_, _) -> g : findYellow answer known gs
+
+checkGuess :: String -> String -> Guess
 checkGuess answer guess =
-  let check = zip (isGreen answer guess) (isYellow answer guess)
-   in map
-        ( \(g, y) ->
-            case (g, y) of
-              (True, _) -> InRightPlace
-              (_, True) -> InWord
-              (_, _) -> NotInWord
-        )
-        check
+  let greens = findGreen answer guess
+      known = fst <$> filter (\(_, s) -> s == InRightPlace) greens
+   in Guess (findYellow answer known greens)
 
 guessWord :: Puzzle -> String -> Puzzle
 guessWord (Puzzle p guesses) guess =
-  let newGuess = Guess (zip guess (checkGuess p guess))
+  let newGuess = checkGuess p guess
    in Puzzle p (newGuess : guesses)
 
 puzzleWin :: Puzzle -> Bool
@@ -70,6 +80,9 @@ puzzleWin puzzle =
 
 mkPuzzle :: String -> Puzzle
 mkPuzzle s = Puzzle (map toUpper s) []
+
+testPuzzle :: Puzzle
+testPuzzle = mkPuzzle "hello"
 
 randomWord :: WordList -> IO String
 randomWord (WordList wl) = do

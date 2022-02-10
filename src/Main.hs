@@ -4,7 +4,7 @@ import Control.Monad (forever, when)
 import Data.Char (toLower, toUpper)
 import Data.Maybe (isJust)
 import Dictionary (WordList (..), allWords)
-import Puzzle (Puzzle (..), checkGuess, guessWord, guessesMade, newPuzzle, puzzleWin)
+import Puzzle (Puzzle (..), checkGuess, guessWord, guessesMade, newPuzzle, puzzleWin, testPuzzle)
 import System.Exit (exitSuccess)
 import System.IO
   ( BufferMode (NoBuffering),
@@ -56,8 +56,8 @@ gameWin puzzle =
 
 gameLoop :: Puzzle -> IO ()
 gameLoop puzzle = forever $ do
-  gameOver puzzle
   gameWin puzzle
+  gameOver puzzle
   putStrLn $
     "Enter your guess ["
       ++ show (guessesMade puzzle)
