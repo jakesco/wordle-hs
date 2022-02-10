@@ -11,7 +11,7 @@ import System.IO
     stdout,
   )
 import System.Random (randomRIO)
-import Words (WordList (..), allWords, puzzleWords)
+import Dictionary (WordList (..), allWords, puzzleWords)
 
 data Puzzle = Puzzle String [Guess]
 
