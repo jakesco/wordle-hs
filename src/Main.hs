@@ -14,9 +14,9 @@ import Puzzle
 import System.Console.Pretty
   ( Color (..),
     Style (..),
+    bgColor,
     color,
     style,
-    bgColor
   )
 import System.Exit (exitSuccess)
 import System.IO
@@ -34,34 +34,33 @@ maxGuesses = 6
 introString :: String
 introString =
   "Welcome to Wordle.hs!\nType "
-  ++ color Green ":?"
-  ++ " for help and "
-  ++ color Green ":q"
-  ++ " to quit. Or Just start guessing!"
+    ++ color Green ":?"
+    ++ " for help and "
+    ++ color Green ":q"
+    ++ " to quit. Or Just start guessing!"
 
 helpString :: String
 helpString =
   style Bold "Rules\n\n"
-  ++ "You have 6 tries to guess the word. Each\n"
-  ++ "guess must be a valid 5 letter word.\n\n"
-  ++ "After each guess, the color of the letters\n"
-  ++ "will indicate the accuracy of your guess.\n\n"
-  ++ style Bold "Examples\n\n"
-  ++ bgColor Green " S "
-  ++ " L  A  T  E \nThe letter"
-  ++ color Green " S "
-  ++ "is in the word and in the correct spot.\n\n"
-  ++ " J "
-  ++ bgColor Yellow " I "
-  ++ " F  F  Y \nThe letter"
-  ++ color Yellow " I "
-  ++ "is in the word but in the wrong spot.\n\n"
-  ++ " P  L  U "
-  ++ bgColor Red " C "
-  ++ " K \nThe letter"
-  ++ color Red " C "
-  ++ "is not in the word.\n"
-
+    ++ "You have 6 tries to guess the word. Each\n"
+    ++ "guess must be a valid 5 letter word.\n\n"
+    ++ "After each guess, the color of the letters\n"
+    ++ "will indicate the accuracy of your guess.\n\n"
+    ++ style Bold "Examples\n\n"
+    ++ bgColor Green " S "
+    ++ " L  A  T  E \nThe letter"
+    ++ color Green " S "
+    ++ "is in the word and in the correct spot.\n\n"
+    ++ " J "
+    ++ bgColor Yellow " I "
+    ++ " F  F  Y \nThe letter"
+    ++ color Yellow " I "
+    ++ "is in the word but in the wrong spot.\n\n"
+    ++ " P  L  U "
+    ++ bgColor Red " C "
+    ++ " K \nThe letter"
+    ++ color Red " C "
+    ++ "is not in the word.\n"
 
 isWord :: WordList -> String -> Bool
 isWord (WordList wl) s = s `elem` wl
@@ -88,9 +87,9 @@ handleGuess puzzle guess = do
 runCommand :: String -> IO ()
 runCommand command =
   case command of
-    ('h':_) -> putStrLn helpString
-    ('?':_) -> putStrLn helpString
-    ('q':_) -> exitSuccess
+    ('h' : _) -> putStrLn helpString
+    ('?' : _) -> putStrLn helpString
+    ('q' : _) -> exitSuccess
     _ -> putStrLn (command ++ " is not a valid command.")
 
 gameOver :: Puzzle -> IO ()
@@ -120,7 +119,7 @@ gameLoop puzzle = forever $ do
   putStr "> "
   input <- getLine
   case input of
-    ':':rest -> runCommand rest
+    ':' : rest -> runCommand rest
     _ ->
       case validateGuess $ map toLower input of
         (Left NotFiveChars) ->
