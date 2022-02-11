@@ -5,7 +5,10 @@ Thanks to Josh Wardle for creating the original game: https://www.powerlanguage.
 
 ## Docker Image
 
-> TODO
+A docker image is available on Docker Hub. If you have Docker installed run:
+```bash
+$ docker run -it jakesco/wordle-hs
+```
 
 ## Pre-compiled Binaries
 
