@@ -13,11 +13,11 @@ newtype WordList = WordList [String]
 puzzleInput :: ByteString
 puzzleInput = $(embedFile "words/puzzle.txt")
 
-allWordsInput :: ByteString
-allWordsInput = $(embedFile "words/all.txt")
-
 puzzleWords :: WordList
 puzzleWords = WordList $ map unpack $ split 10 $ filter (/=13) puzzleInput
+
+allWordsInput :: ByteString
+allWordsInput = $(embedFile "words/all.txt")
 
 allWords :: WordList
 allWords = WordList $ map unpack $ split 10 $ filter (/=13) allWordsInput

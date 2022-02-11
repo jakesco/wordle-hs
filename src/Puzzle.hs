@@ -81,9 +81,6 @@ puzzleWin puzzle =
 mkPuzzle :: String -> Puzzle
 mkPuzzle s = Puzzle (map toUpper s) []
 
-testPuzzle :: Puzzle
-testPuzzle = mkPuzzle "hello"
-
 randomWord :: WordList -> IO String
 randomWord (WordList wl) = do
   randomIndex <- randomRIO (0, length wl - 1)

@@ -3,7 +3,14 @@ module Main where
 import Control.Monad (forever, when)
 import Data.Char (toLower, toUpper)
 import Dictionary (WordList (..), allWords)
-import Puzzle (Puzzle (..), checkGuess, guessWord, guessesMade, newPuzzle, puzzleWin, testPuzzle)
+import Puzzle
+  ( Puzzle (..),
+    checkGuess,
+    guessWord,
+    guessesMade,
+    newPuzzle,
+    puzzleWin,
+  )
 import System.Console.Pretty
   ( Color (..),
     Style (..),
