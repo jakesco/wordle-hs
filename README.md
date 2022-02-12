@@ -3,6 +3,8 @@ Play Wordle on the command line.
 
 Thanks to Josh Wardle for creating the original game: https://www.powerlanguage.co.uk/wordle/
 
+![Wordle.hs in action](./wordle-hs-demo.gif)
+
 ## Docker Image
 
 A docker image is available on Docker Hub. If you have Docker installed run:
