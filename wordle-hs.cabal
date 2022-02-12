@@ -1,6 +1,6 @@
 cabal-version:      2.4
 name:               wordle-hs
-version:            1.0.0
+version:            1.1.0
 synopsis:           Play Wordle on the command line.
 license:            MIT
 author:             Jake Scott
