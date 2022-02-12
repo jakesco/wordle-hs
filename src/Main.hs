@@ -60,7 +60,7 @@ helpString =
     ++ color Yellow " I "
     ++ "is in the word but in the wrong spot.\n\n"
     ++ " P  L  U "
-    ++ (style Bold . color Black. bgColor White) " C "
+    ++ (style Bold . color Black . bgColor White) " C "
     ++ " K \nThe letter C is not in the word.\n"
 
 isWord :: WordList -> String -> Bool

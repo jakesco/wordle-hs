@@ -1,9 +1,16 @@
 module Puzzle where
 
-import Data.Char (toUpper, isAlpha)
+import Data.Char (isAlpha, toUpper)
 import Data.List (elemIndices, insert)
 import Dictionary (WordList (..), alphabet, puzzleWords)
-import System.Console.Pretty (Color (..), Style (..), Pretty, color, bgColor, style)
+import System.Console.Pretty
+  ( Color (..),
+    Pretty,
+    Style (..),
+    bgColor,
+    color,
+    style,
+  )
 import System.Random (randomRIO)
 
 type Answer = String
@@ -53,8 +60,13 @@ instance Show Puzzle where
 
 searchGuess :: [Letter] -> Char -> Letter
 searchGuess gs c =
-  Letter c
-  (foldr (max .status . (gs !!)) NotChecked $ elemIndices c (map char gs))
+  Letter
+    c
+    ( foldr
+        (max . status . (gs !!))
+        NotChecked
+        $ elemIndices c (map char gs)
+    )
 
 concatGuesses :: [Guess] -> [Letter]
 concatGuesses = concatMap (\(Guess g) -> g)
@@ -87,7 +99,8 @@ findYellow _ _ [] = []
 findYellow answer known (g : gs) =
   case g of
     (Letter c NotChecked) ->
-      if (countOccurances c answer > countOccurances c known) && charInAnswer answer c
+      if (countOccurances c answer > countOccurances c known)
+        && charInAnswer answer c
         then Letter c InWord : findYellow answer (c : known) gs
         else Letter c NotInWord : findYellow answer known gs
     _ -> g : findYellow answer known gs
