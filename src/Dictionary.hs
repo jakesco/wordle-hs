@@ -10,6 +10,9 @@ import Prelude hiding (filter)
 newtype WordList = WordList [String]
   deriving (Eq, Show)
 
+alphabet :: String
+alphabet = "ABCDEFGHIJKLM\nNOPQRSTUVWXYZ"
+
 puzzleInput :: ByteString
 puzzleInput = $(embedFile "words/puzzle.txt")
 

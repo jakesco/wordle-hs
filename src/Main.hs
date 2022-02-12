@@ -10,6 +10,7 @@ import Puzzle
     guessesMade,
     newPuzzle,
     puzzleWin,
+    showGuessed,
   )
 import System.Console.Pretty
   ( Color (..),
@@ -35,9 +36,11 @@ introString :: String
 introString =
   "Welcome to Wordle.hs!\nType "
     ++ color Green ":?"
-    ++ " for help and "
+    ++ " for help, "
+    ++ color Green ":g"
+    ++ " to view guessed letters, or "
     ++ color Green ":q"
-    ++ " to quit. Or Just start guessing!"
+    ++ " to quit."
 
 helpString :: String
 helpString =
@@ -57,10 +60,8 @@ helpString =
     ++ color Yellow " I "
     ++ "is in the word but in the wrong spot.\n\n"
     ++ " P  L  U "
-    ++ bgColor Red " C "
-    ++ " K \nThe letter"
-    ++ color Red " C "
-    ++ "is not in the word.\n"
+    ++ (style Bold . color Black. bgColor White) " C "
+    ++ " K \nThe letter C is not in the word.\n"
 
 isWord :: WordList -> String -> Bool
 isWord (WordList wl) s = s `elem` wl
@@ -84,11 +85,12 @@ handleGuess puzzle guess = do
   print newPuzzle
   return newPuzzle
 
-runCommand :: String -> IO ()
-runCommand command =
+runCommand :: String -> Puzzle -> IO ()
+runCommand command puzzle =
   case command of
     ('h' : _) -> putStrLn helpString
     ('?' : _) -> putStrLn helpString
+    ('g' : _) -> putStrLn $ showGuessed puzzle
     ('q' : _) -> exitSuccess
     _ -> putStrLn (command ++ " is not a valid command.")
 
@@ -119,7 +121,7 @@ gameLoop puzzle = forever $ do
   putStr "> "
   input <- getLine
   case input of
-    ':' : rest -> runCommand rest
+    ':' : rest -> runCommand rest puzzle
     _ ->
       case validateGuess $ map toLower input of
         (Left NotFiveChars) ->

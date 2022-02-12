@@ -1,31 +1,43 @@
 module Puzzle where
 
-import Data.Char (toUpper)
-import Dictionary (WordList (..), puzzleWords)
-import System.Console.Pretty (Color (..), Pretty, bgColor)
+import Data.Char (toUpper, isAlpha)
+import Data.List (elemIndices, insert)
+import Dictionary (WordList (..), alphabet, puzzleWords)
+import System.Console.Pretty (Color (..), Style (..), Pretty, color, bgColor, style)
 import System.Random (randomRIO)
 
 type Answer = String
 
-data CharStatus = InRightPlace | InWord | NotInWord | NotChecked
-  deriving (Eq, Show)
+data CharStatus = NotChecked | NotInWord | InWord | InRightPlace
+  deriving (Eq, Ord, Show)
 
-newtype Guess = Guess [(Char, CharStatus)]
+data Letter = Letter
+  { char :: Char,
+    status :: CharStatus
+  }
   deriving (Eq)
 
-instance Show Guess where
-  show (Guess g) = foldr (\g -> (++) (getColor (snd g) $ pad (fst g))) [] g
+instance Show Letter where
+  show (Letter c s) = getColor s $ pad c
 
 pad :: Char -> String
-pad c = [' ', toUpper c, ' ']
+pad c
+  | isAlpha c = [' ', toUpper c, ' ']
+  | otherwise = [c]
 
 getColor :: Pretty a => CharStatus -> a -> a
 getColor cs =
   case cs of
     InRightPlace -> bgColor Green
     InWord -> bgColor Yellow
-    NotInWord -> bgColor Red
-    _ -> bgColor Cyan
+    NotInWord -> style Bold . color Black . bgColor White
+    _ -> id
+
+newtype Guess = Guess [Letter]
+  deriving (Eq)
+
+instance Show Guess where
+  show (Guess g) = concatMap show g
 
 data Puzzle = Puzzle
   { answer :: Answer,
@@ -39,32 +51,51 @@ instance Show Puzzle where
       [] -> concatMap pad p
       (g : _) -> show g
 
+searchGuess :: [Letter] -> Char -> Letter
+searchGuess gs c =
+  Letter c
+  (foldr (max .status . (gs !!)) NotChecked $ elemIndices c (map char gs))
+
+concatGuesses :: [Guess] -> [Letter]
+concatGuesses = concatMap (\(Guess g) -> g)
+
+showGuessed (Puzzle _ gs) =
+  concatMap (show . searchGuess (concatGuesses gs)) alphabet
+
 guessesMade :: Puzzle -> Int
 guessesMade puzzle = 1 + (length . guesses) puzzle
 
 charInAnswer :: Answer -> Char -> Bool
 charInAnswer answer = (`elem` answer)
 
-findGreen :: Answer -> String -> [(Char, CharStatus)]
-findGreen answer guess = zip guess $ map (\s -> if s then InRightPlace else NotChecked) $ zipWith (==) answer guess
+findGreen :: Answer -> String -> [Letter]
+findGreen answer guess =
+  let greens = zip guess $ zipWith (==) answer guess
+   in map
+        ( \(c, s) ->
+            if s
+              then Letter c InRightPlace
+              else Letter c NotChecked
+        )
+        greens
 
 countOccurances :: Eq a => a -> [a] -> Int
 countOccurances c = length . filter (== c)
 
-findYellow :: Answer -> String -> [(Char, CharStatus)] -> [(Char, CharStatus)]
+findYellow :: Answer -> String -> [Letter] -> [Letter]
 findYellow _ _ [] = []
 findYellow answer known (g : gs) =
   case g of
-    (c, NotChecked) ->
+    (Letter c NotChecked) ->
       if (countOccurances c answer > countOccurances c known) && charInAnswer answer c
-        then (c, InWord) : findYellow answer (c : known) gs
-        else (c, NotInWord) : findYellow answer known gs
-    (_, _) -> g : findYellow answer known gs
+        then Letter c InWord : findYellow answer (c : known) gs
+        else Letter c NotInWord : findYellow answer known gs
+    _ -> g : findYellow answer known gs
 
 checkGuess :: String -> String -> Guess
 checkGuess answer guess =
   let greens = findGreen answer guess
-      known = fst <$> filter (\(_, s) -> s == InRightPlace) greens
+      known = char <$> filter (\(Letter _ s) -> s == InRightPlace) greens
    in Guess (findYellow answer known greens)
 
 guessWord :: Puzzle -> String -> Puzzle
@@ -76,7 +107,7 @@ puzzleWin :: Puzzle -> Bool
 puzzleWin puzzle =
   case guesses puzzle of
     [] -> False
-    (Guess g) : _ -> all ((== InRightPlace) . snd) g
+    (Guess g) : _ -> all ((== InRightPlace) . status) g
 
 mkPuzzle :: String -> Puzzle
 mkPuzzle s = Puzzle (map toUpper s) []
