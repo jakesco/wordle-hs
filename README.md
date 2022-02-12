@@ -14,7 +14,7 @@ $ docker run -it jakesco/wordle-hs
 
 The [Releases](https://github.com/jakesco/wordle-hs/releases) page provides pre-compiled binaries for Linux and Windows 64-bit systems. Simply copy the desired binary into your path and run it (after verifying the checksum).
 
-> Windows command prompt doesn't support ANSI escape sequences used to color the wordle output. Use
+> Windows command prompt doesn't support ANSI escape sequences used to color the Wordle.hs output. Use
 > [Windows Terminal](https://github.com/microsoft/terminal) for the best expierience.
 
 ## Manual Install
@@ -37,7 +37,7 @@ $ cabal run
 or install the executable.
 ```bash
 $ cabal install
-$ wordle
+$ wordlehs
 ```
 
-> The default install target for `cabal install` is `~/.cabal/bin`. Make sure the `wordle` executable is on your path.
+> The default install target for `cabal install` is `~/.cabal/bin`. Make sure the `wordlehs` executable is on your path.

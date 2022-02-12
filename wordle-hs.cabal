@@ -11,7 +11,7 @@ data-files:
     words/all.txt
     words/puzzle.txt
 
-executable wordle
+executable wordlehs
     main-is:          Main.hs
     hs-source-dirs:   src
     other-modules:    Dictionary, Puzzle
