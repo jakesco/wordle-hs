@@ -3,7 +3,7 @@ Play Wordle on the command line.
 
 Thanks to Josh Wardle for creating the original game: https://www.powerlanguage.co.uk/wordle/
 
-![Wordle.hs in action](./wordle-hs-demo.gif)
+![wordls-hs-demo](https://user-images.githubusercontent.com/43647018/153726753-999e3c5a-b22e-4f38-881e-ba7a1461d2c0.gif)
 
 ## Docker Image
 
