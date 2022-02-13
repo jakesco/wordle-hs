@@ -33,5 +33,6 @@ test-suite spec
     other-modules:      WordleSpec, PuzzleSpec
     ghc-options:        -threaded -Wall
     build-depends:      hspec
+                      , QuickCheck
                       -- , wordle-hs
     build-tool-depends: hspec-discover:hspec-discover == 2.*

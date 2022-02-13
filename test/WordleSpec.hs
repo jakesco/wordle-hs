@@ -1,9 +1,13 @@
 module WordleSpec (spec) where
 
 import Test.Hspec
+import Test.QuickCheck
+
+tmpPad :: Char -> String
+tmpPad c = [' ', c, ' ']
 
 spec :: Spec
 spec = do
   describe "Test the testing" $ do
-    it "Does some testing" $ do
-      1 + 1 `shouldBe` 2
+    it "Temp Pad" $ do
+      property $ \x -> x + 1 > (x :: Int)
