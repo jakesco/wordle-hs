@@ -29,6 +29,18 @@ type Guess = [Letter]
 instance Show Letter where
   show (Letter c s) = getColor s $ pad c
 
+data Puzzle = Puzzle
+  { answer :: Answer,
+    guesses :: [Guess]
+  }
+  deriving (Eq)
+
+instance Show Puzzle where
+  show (Puzzle p guesses) =
+    case guesses of
+      [] -> concatMap pad p
+      (g : _) -> concatMap show g
+
 pad :: Char -> String
 pad c
   | isAlpha c = [' ', toUpper c, ' ']
@@ -42,18 +54,6 @@ getColor cs =
     NotInWord -> style Bold . color Black . bgColor White
     _ -> id
 
-data Puzzle = Puzzle
-  { answer :: Answer,
-    guesses :: [Guess]
-  }
-  deriving (Eq)
-
-instance Show Puzzle where
-  show (Puzzle p guesses) =
-    case guesses of
-      [] -> concatMap pad p
-      (g : _) -> concatMap show g
-
 searchGuess :: Guess -> Char -> Letter
 searchGuess gs c =
   Letter
@@ -64,6 +64,7 @@ searchGuess gs c =
         $ elemIndices c (map char gs)
     )
 
+showGuessed :: Puzzle -> String
 showGuessed (Puzzle _ gs) =
   concatMap (show . searchGuess (concat gs)) alphabet
 
