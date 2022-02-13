@@ -1,6 +1,6 @@
 cabal-version:      2.4
 name:               wordle-hs
-version:            1.1.0
+version:            1.1.2
 synopsis:           Play Wordle on the command line.
 license:            MIT
 author:             Jake Scott
@@ -11,14 +11,27 @@ data-files:
     words/all.txt
     words/puzzle.txt
 
-executable wordlehs
-    main-is:          Main.hs
-    hs-source-dirs:   src
-    other-modules:    Dictionary, Puzzle
+common shared
     default-language: Haskell2010
     build-depends:    base >=4.14 && <4.15
-                    , random
-                    , bytestring
-                    , pretty-terminal
-                    , file-embed
-                    , hspec
+
+executable wordlehs
+    import:             shared
+    main-is:            Wordle.hs
+    hs-source-dirs:     src
+    other-modules:      Dictionary, Puzzle
+    build-depends:      random
+                      , bytestring
+                      , pretty-terminal
+                      , file-embed
+
+test-suite spec
+    import:             shared
+    type:               exitcode-stdio-1.0
+    main-is:            Spec.hs
+    hs-source-dirs:     test
+    other-modules:      WordleSpec, PuzzleSpec
+    ghc-options:        -threaded -Wall
+    build-depends:      hspec
+                      -- , wordle-hs
+    build-tool-depends: hspec-discover:hspec-discover == 2.*
