@@ -33,7 +33,7 @@ $ cabal build
 
 Then you can run from the project directory with:
 ```bash
-$ cabal run
+$ cabal run wordlehs
 ```
 
 or install the executable.

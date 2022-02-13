@@ -1,6 +1,8 @@
 module PuzzleSpec (spec) where
 
 import Test.Hspec
+import Puzzle (pad)
+
 
 spec :: Spec
 spec = do

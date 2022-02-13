@@ -1,4 +1,4 @@
-module Main where
+module Wordle where
 
 import Control.Monad (forever, when)
 import Data.Char (toLower, toUpper)
@@ -20,11 +20,6 @@ import System.Console.Pretty
     style,
   )
 import System.Exit (exitSuccess)
-import System.IO
-  ( BufferMode (NoBuffering),
-    hSetBuffering,
-    stdout,
-  )
 
 data ValidationError = NotAWord | NotFiveChars
   deriving (Eq, Show)
@@ -129,10 +124,3 @@ gameLoop puzzle = forever $ do
         (Left NotAWord) ->
           putStrLn "Your guess is not in the word list."
         (Right g) -> handleGuess puzzle g >>= gameLoop
-
-main :: IO ()
-main = do
-  hSetBuffering stdout NoBuffering
-  putStrLn introString
-  puzzle <- newPuzzle
-  gameLoop puzzle

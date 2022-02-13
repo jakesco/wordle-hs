@@ -3,8 +3,10 @@ name:               wordle-hs
 version:            1.1.2
 synopsis:           Play Wordle on the command line.
 license:            MIT
+license-file:       LICENSE
 author:             Jake Scott
 maintainer:         scottj1123@gmail.com
+build-type:         Simple
 extra-source-files:
     README.md
 data-files:
@@ -13,13 +15,14 @@ data-files:
 
 common shared
     default-language: Haskell2010
-    build-depends:    base >=4.14 && <4.15
+    build-depends:    base
 
-executable wordlehs
+
+library
     import:             shared
-    main-is:            Wordle.hs
-    hs-source-dirs:     src
-    other-modules:      Dictionary, Puzzle
+    hs-source-dirs:     src/Wordle
+    exposed-modules:    Puzzle, Wordle
+    other-modules:      Dictionary
     build-depends:      random
                       , bytestring
                       , pretty-terminal
@@ -32,7 +35,13 @@ test-suite spec
     hs-source-dirs:     test
     other-modules:      WordleSpec, PuzzleSpec
     ghc-options:        -threaded -Wall
+    build-tool-depends: hspec-discover:hspec-discover == 2.*
     build-depends:      hspec
                       , QuickCheck
-                      -- , wordle-hs
-    build-tool-depends: hspec-discover:hspec-discover == 2.*
+                      , wordle-hs
+
+executable wordlehs
+    import:             shared
+    main-is:            Main.hs
+    hs-source-dirs:     src
+    build-depends:      wordle-hs
