@@ -24,6 +24,8 @@ data Letter = Letter
   }
   deriving (Eq)
 
+type Guess = [Letter]
+
 instance Show Letter where
   show (Letter c s) = getColor s $ pad c
 
@@ -40,12 +42,6 @@ getColor cs =
     NotInWord -> style Bold . color Black . bgColor White
     _ -> id
 
-newtype Guess = Guess [Letter]
-  deriving (Eq)
-
-instance Show Guess where
-  show (Guess g) = concatMap show g
-
 data Puzzle = Puzzle
   { answer :: Answer,
     guesses :: [Guess]
@@ -56,9 +52,9 @@ instance Show Puzzle where
   show (Puzzle p guesses) =
     case guesses of
       [] -> concatMap pad p
-      (g : _) -> show g
+      (g : _) -> concatMap show g
 
-searchGuess :: [Letter] -> Char -> Letter
+searchGuess :: Guess -> Char -> Letter
 searchGuess gs c =
   Letter
     c
@@ -68,11 +64,8 @@ searchGuess gs c =
         $ elemIndices c (map char gs)
     )
 
-concatGuesses :: [Guess] -> [Letter]
-concatGuesses = concatMap (\(Guess g) -> g)
-
 showGuessed (Puzzle _ gs) =
-  concatMap (show . searchGuess (concatGuesses gs)) alphabet
+  concatMap (show . searchGuess (concat gs)) alphabet
 
 guessesMade :: Puzzle -> Int
 guessesMade puzzle = 1 + (length . guesses) puzzle
@@ -80,7 +73,7 @@ guessesMade puzzle = 1 + (length . guesses) puzzle
 charInAnswer :: Answer -> Char -> Bool
 charInAnswer answer = (`elem` answer)
 
-findGreen :: Answer -> String -> [Letter]
+findGreen :: Answer -> String -> Guess
 findGreen answer guess =
   let greens = zip guess $ zipWith (==) answer guess
    in map
@@ -94,7 +87,7 @@ findGreen answer guess =
 countOccurances :: Eq a => a -> [a] -> Int
 countOccurances c = length . filter (== c)
 
-findYellow :: Answer -> String -> [Letter] -> [Letter]
+findYellow :: Answer -> String -> Guess -> Guess
 findYellow _ _ [] = []
 findYellow answer known (g : gs) =
   case g of
@@ -109,7 +102,7 @@ checkGuess :: String -> String -> Guess
 checkGuess answer guess =
   let greens = findGreen answer guess
       known = char <$> filter (\(Letter _ s) -> s == InRightPlace) greens
-   in Guess (findYellow answer known greens)
+   in findYellow answer known greens
 
 guessWord :: Puzzle -> String -> Puzzle
 guessWord (Puzzle p guesses) guess =
@@ -120,7 +113,7 @@ puzzleWin :: Puzzle -> Bool
 puzzleWin puzzle =
   case guesses puzzle of
     [] -> False
-    (Guess g) : _ -> all ((== InRightPlace) . status) g
+    g : _ -> all ((== InRightPlace) . status) g
 
 mkPuzzle :: String -> Puzzle
 mkPuzzle s = Puzzle (map toUpper s) []
