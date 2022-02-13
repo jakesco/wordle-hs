@@ -86,7 +86,9 @@ runCommand command puzzle =
     ('h' : _) -> putStrLn helpString
     ('?' : _) -> putStrLn helpString
     ('g' : _) -> putStrLn $ showGuessed puzzle
-    ('q' : _) -> exitSuccess
+    ('q' : _) -> do
+      putStrLn $ "Exiting. The word was " ++ answer puzzle ++ "."
+      exitSuccess
     _ -> putStrLn (command ++ " is not a valid command.")
 
 gameOver :: Puzzle -> IO ()
