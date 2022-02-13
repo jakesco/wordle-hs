@@ -21,3 +21,4 @@ executable wordlehs
                     , bytestring
                     , pretty-terminal
                     , file-embed
+                    , hspec
