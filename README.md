@@ -14,7 +14,7 @@ $ docker run -it jakesco/wordle-hs
 
 ## Pre-compiled Binaries
 
-The [Releases](https://github.com/jakesco/wordle-hs/releases) page provides pre-compiled binaries for Linux and Windows 64-bit systems. Simply copy the desired binary into your path and run it (after verifying the checksum).
+The [Releases](https://github.com/jakesco/wordle-hs/releases) page provides pre-compiled binaries for Windows 64-bit systems. Simply copy the desired binary into your path and run it (after verifying the checksum).
 
 > Windows command prompt doesn't support ANSI escape sequences used to color the Wordle.hs output. Use
 > [Windows Terminal](https://github.com/microsoft/terminal) for the best expierience.
