@@ -11,6 +11,7 @@ import Puzzle
     newPuzzle,
     puzzleWin,
     showGuessed,
+    showLetters,
   )
 import System.Console.Pretty
   ( Color (..),
@@ -82,7 +83,6 @@ validateGuess guess =
 handleGuess :: Puzzle -> String -> IO Puzzle
 handleGuess puzzle guess = do
   let newPuzzle = guessWord puzzle (map toUpper guess)
-  print newPuzzle
   return newPuzzle
 
 runCommand :: String -> Puzzle -> IO ()
@@ -112,6 +112,8 @@ gameLoop :: Puzzle -> IO ()
 gameLoop puzzle = forever $ do
   gameWin puzzle
   gameOver puzzle
+  putStrLn $ showLetters puzzle
+  putStrLn $ showGuessed puzzle
   putStrLn $
     "Enter your guess ["
       ++ show (guessesMade puzzle)
