@@ -64,9 +64,14 @@ searchGuess gs c =
         $ elemIndices c (map char gs)
     )
 
-showGuessed :: Puzzle -> String
-showGuessed (Puzzle _ gs) =
+showLetters :: Puzzle -> String
+showLetters (Puzzle _ gs) =
   concatMap (show . searchGuess (concat gs)) alphabet
+
+showGuessed :: Puzzle -> String
+showGuessed (Puzzle _ []) = ""
+showGuessed (Puzzle _ gs) =
+  "\n" ++ concatMap (\s -> concatMap show s ++ "\n") (reverse gs)
 
 guessesMade :: Puzzle -> Int
 guessesMade puzzle = 1 + (length . guesses) puzzle
