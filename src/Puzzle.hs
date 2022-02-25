@@ -85,15 +85,15 @@ findGreen answer guess =
         )
         greens
 
-countOccurances :: Eq a => a -> [a] -> Int
-countOccurances c = length . filter (== c)
+countOccurrences :: Eq a => a -> [a] -> Int
+countOccurrences c = length . filter (== c)
 
 findYellow :: Answer -> String -> Guess -> Guess
 findYellow _ _ [] = []
 findYellow answer known (g : gs) =
   case g of
     (Letter c NotChecked) ->
-      if (countOccurances c answer > countOccurances c known)
+      if (countOccurrences c answer > countOccurrences c known)
         && charInAnswer answer c
         then Letter c InWord : findYellow answer (c : known) gs
         else Letter c NotInWord : findYellow answer known gs
